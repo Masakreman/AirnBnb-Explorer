@@ -3,12 +3,14 @@ import bcrypt
 import jwt
 import datetime
 import globals
+from decorators import jwt_required
 
 
 auth_bp = Blueprint('auth_bp', __name__)
 
 users = globals.users
 hosts = globals.hosts
+blacklist = globals.blacklist
 
 @auth_bp.route('/api/v1.0/login', methods=['GET'])
 def login():
@@ -51,3 +53,10 @@ def login():
         return make_response(jsonify({'message': 'Bad username or password'}), 401)
 
     return make_response(jsonify({'message': 'Authentication required'}), 401)
+
+@auth_bp.route('/api/v1.0/logout', methods=["GET"])
+@jwt_required
+def logout():
+    token = request.headers['x-access-token']
+    blacklist.insert_one({"token":token})
+    return make_response(jsonify( {'message' : 'Logout successful' } ), 200 )

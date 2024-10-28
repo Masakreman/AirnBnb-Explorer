@@ -48,7 +48,7 @@ def jwt_required(func):
         # Check if token is blacklisted
         bl_token = blacklist.find_one({"token": token})
         if bl_token is not None:
-            return make_response(jsonify({'message': 'Token has been cancelled'}), 401)
+            return make_response(jsonify({'message': 'Token has been cancelled, Please login'}), 401)
 
         return func(*args, **kwargs)
 
