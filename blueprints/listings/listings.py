@@ -3,7 +3,7 @@ from bson import ObjectId
 import random
 import globals
 import jwt
-from decorators import role_required
+from decorators import role_required, jwt_required, admin_required
 
 listings_bp = Blueprint('listings_bp', __name__)
 
@@ -153,23 +153,40 @@ def create_listing():
         return make_response(jsonify({"error" : "Missing or invalud form data"}), 400)
 
 
+@listings_bp.route("/api/v1.0/listings/<string:id>", methods=["PUT"])
+@role_required('host')
+def edit_listing(id):
+    fields_in_listing = [
+        "listing_url", "picture_url", "name", "description", "property_type", "room_type",
+        "accomodates", "bathrooms", "bedrooms", "beds", "amenities", "price", "minimum_nights", "maximum_nights", "number_of_reviews",
+        "review_scores_rating", "review_scores_location", "location", "neighbourhood"
+    ]
 
+    update_fields = {}
+    
+    for field in fields_in_listing:
+        if field in request.form:
+            if field == "amenities":
+                # Split amenities by comma, trim whitespace, and handle it as a list
+                update_fields[field] = [amenity.strip() for amenity in request.form[field].split(',')]
+            else:
+                update_fields[field] = request.form[field]
 
-    # if "name" in request.form and "town" in request.form and "rating" in request.form:
-    #     try:
-    #         if int(request.form["rating"]) <= 5 and int(request.form["rating"]) >= 1:
-    #             new_business = {
-    #                 "name": request.form["name"],
-    #                 "town": request.form["town"],
-    #                 "rating": request.form["rating"],
-    #                 "reviews": []
-    #             }
-    #             new_business_id = businesses.insert_one(new_business)
-    #             new_business_link = "http://127.0.0.1:5000/api/v1.0/businesses/" \
-    #                 + str(new_business_id.inserted_id)
-    #             return make_response(jsonify({"url" : new_business_link}), 201)
-    #         else:
-    #             return make_response(jsonify({"error" : "Rating must be between 1 - 5"}), 400)
-    #     except ValueError:
-    #         return make_response(jsonify({"error" : "Missing or invalid form data. Rating must be between 1 - 5"}), 400)
-    # return make_response(jsonify({"error": "Missing required form data"}), 400)
+    # Update the listing
+    result = listings.update_one({'_id': ObjectId(id)}, {"$set": update_fields})
+
+    if result.matched_count == 1:
+        edited_listing_link = "http://127.0.0.1:5000/api/v1.0/listings/" + id
+        return make_response(jsonify({"url" : edited_listing_link}), 200)
+    else:
+        return make_response(jsonify({"error" : "Invalid Business id"}))
+    
+@listings_bp.route("/api/v1.0/listings/<string:id>", methods=["DELETE"])
+@jwt_required
+@admin_required
+def delete_business(id):
+    result = listings.delete_one({ "_id" : ObjectId(id)})
+    if result.deleted_count == 1:
+        return make_response(jsonify({}), 204)
+    else:
+        return make_response(jsonify({"Error" : "Listing not found"}), 404)
