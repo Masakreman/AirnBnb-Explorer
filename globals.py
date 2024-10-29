@@ -9,6 +9,5 @@ users = db.users
 hosts = db.hosts
 neighbourhoods = db.neighbourhoods
 blacklist = db.blacklist
-geodata = db.geodata
 
 secret_key = secrets.token_hex(16)
