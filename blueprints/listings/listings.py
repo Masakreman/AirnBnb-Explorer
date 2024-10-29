@@ -8,9 +8,6 @@ from decorators import role_required, jwt_required, admin_required
 listings_bp = Blueprint('listings_bp', __name__)
 
 listings = globals.listings
-hosts = globals.hosts
-neighbourhoods = globals.neighbourhoods
-geodata = globals.geodata
 
 @listings_bp.route("/api/v1.0/listings", methods=["GET"])
 def show_all_listings():
@@ -66,8 +63,6 @@ def show_one_listing(id):
     else:
         return make_response(jsonify({"error" : "Invalid listing ID"}))
     
-
-
 
 @listings_bp.route('/api/v1.0/listings', methods=['POST'])
 @role_required('host')
