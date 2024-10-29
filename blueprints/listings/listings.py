@@ -8,6 +8,9 @@ from decorators import role_required, jwt_required, admin_required
 listings_bp = Blueprint('listings_bp', __name__)
 
 listings = globals.listings
+hosts = globals.hosts
+neighbourhoods = globals.neighbourhoods
+geodata = globals.geodata
 
 @listings_bp.route("/api/v1.0/listings", methods=["GET"])
 def show_all_listings():
@@ -49,8 +52,6 @@ def show_one_listing(id):
         if 'host' in listing:
             if '_id' in listing['host']:
                 listing['host']['_id'] = str(listing['host']['_id'])
-                if 'current_listings' in listing['host']:
-                    listing['host']['current_listings'] = [str(listing_id) for listing_id in listing['host']['current_listings']]
         
         # Convert review _id fields and user_id fields in reviews to strings
         if 'reviews' in listing:
@@ -63,6 +64,8 @@ def show_one_listing(id):
     else:
         return make_response(jsonify({"error" : "Invalid listing ID"}))
     
+
+
 
 @listings_bp.route('/api/v1.0/listings', methods=['POST'])
 @role_required('host')
