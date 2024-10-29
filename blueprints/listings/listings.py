@@ -10,7 +10,6 @@ listings_bp = Blueprint('listings_bp', __name__)
 listings = globals.listings
 hosts = globals.hosts
 neighbourhoods = globals.neighbourhoods
-geodata = globals.geodata
 
 @listings_bp.route("/api/v1.0/listings", methods=["GET"])
 def show_all_listings():
@@ -71,19 +70,19 @@ def show_one_listing(id):
 @role_required('host')
 def create_listing():
     host_info = {}
+
     required_fields = [
         "name", "property_type", "room_type",
         "accomodates", "bathrooms", "bedrooms",
         "beds", "price", "minimum_nights"
     ]
 
-
+    # Decode the token to get the host_id and from that get the hosts record
     token = request.headers.get('x-access-token')
-    # Decode the token to get the host_id
     decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
     host_id = decoded['host_id']
-
     host_info = hosts.find_one({'_id' : ObjectId(host_id)})
+
     if host_info:
         host_info = {
                 "_id": str(host_info['_id']),  # Convert ObjectId to string
@@ -98,7 +97,7 @@ def create_listing():
                 "host_identity_verified": host_info.get("host_identity_verified")
             }
 
-    # Select a random neighbourhood
+        # Select a random neighbourhood
         neighbourhood = neighbourhoods.aggregate([{"$sample": {"size": 1}}]).next()
         selected_neighbourhood_name = neighbourhood["neighbourhood_name"]
         boundary = neighbourhood["boundary_coordinates"]
