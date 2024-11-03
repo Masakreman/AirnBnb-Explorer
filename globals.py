@@ -9,5 +9,6 @@ users = db.users
 hosts = db.hosts
 neighbourhoods = db.neighbourhoods
 blacklist = db.blacklist
+wifiLocations = db.wifi_locations
 
 secret_key = secrets.token_hex(16)

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 import bcrypt
 import jwt
-import datetime
+from datetime import datetime, timedelta
 import globals
 from decorators import jwt_required
 
@@ -11,6 +11,74 @@ auth_bp = Blueprint('auth_bp', __name__)
 users = globals.users
 hosts = globals.hosts
 blacklist = globals.blacklist
+
+@auth_bp.route('/api/v1.0/register/user', methods=['POST'])
+def registerUser():
+    required_fields = [
+        "user_name", "password"
+    ]
+
+    # Check for missing required fields
+    missing_fields = [field for field in required_fields if field not in request.form]
+    if missing_fields:
+        return make_response(jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400)
+
+    try:
+        password = request.form['password'].encode('utf-8')
+        hashedPassword = bcrypt.hashpw(password, bcrypt.gensalt())
+
+        newUser = {
+            "user_name": request.form['user_name'],
+            "password": hashedPassword,
+            "admin": False,
+            "user_reviews": []
+        }
+
+        new_user = users.insert_one(newUser)
+        new_user_link = "http://127.0.0.1:5000/api/v1.0/users/" \
+        + str(new_user.inserted_id)
+        return make_response(jsonify({"url" : new_user_link}), 201)
+    except ValueError:
+        return make_response(jsonify({"error": "Missing or invalid form data"}), 400)
+    
+
+@auth_bp.route('/api/v1.0/register/host', methods=['POST'])
+def registerHost():
+    required_fields = [
+        "host_name", "password"
+    ]
+
+    # Check for missing required fields
+    missing_fields = [field for field in required_fields if field not in request.form]
+    if missing_fields:
+        return make_response(jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400)
+
+    try:
+        password = request.form['password'].encode('utf-8')
+        hashedPassword = bcrypt.hashpw(password, bcrypt.gensalt())
+
+        newHost = {
+            "host_name": request.form['host_name'],
+            "host_verifications": [],
+            "host_since": datetime.today().strftime('%Y-%m-%d'),
+            "host_location": '',
+            "host_about": '',
+            "host_response_time": '',
+            "host_response_rate": '',
+            "host_acceptance_rate": '',
+            "host_identity_verified": False,
+            "current_listings": [],
+            "password": hashedPassword,
+            "admin": False,
+        }
+
+        new_host = hosts.insert_one(newHost)
+        new_host_link = "http://127.0.0.1:5000/api/v1.0/hosts/" \
+        + str(new_host.inserted_id)
+        return make_response(jsonify({"url" : new_host_link}), 201)
+    except ValueError:
+        return make_response(jsonify({"error": "Missing or invalid form data"}), 400)
+
 
 @auth_bp.route('/api/v1.0/login', methods=['GET'])
 def login():
@@ -28,7 +96,7 @@ def login():
                     'role': 'user',
                     'admin': user['admin'],
                     'user_id': str(user['_id']),
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                    'exp': datetime.utcnow() + timedelta(minutes=30)
                 }, globals.secret_key, algorithm="HS256")
                 return make_response(jsonify({'token': token}), 200)
             else:
@@ -45,7 +113,7 @@ def login():
                     'role': 'host',
                     'admin': False,  # Assuming hosts are not admins
                     'host_id': str(host['_id']),
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                    'exp': datetime.utcnow() + timedelta(minutes=30)
                 }, globals.secret_key, algorithm="HS256")
                 return make_response(jsonify({'token': token}), 200)
         
