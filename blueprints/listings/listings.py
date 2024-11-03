@@ -13,32 +13,80 @@ neighbourhoods = globals.neighbourhoods
 
 @listings_bp.route("/api/v1.0/listings", methods=["GET"])
 def show_all_listings():
-    page_num, page_size = 1, 3
-    if request.args.get('pn'):
-        page_num = int(request.args.get('pn'))
-    if request.args.get('ps'):
-        page_size = int(request.args.get('ps'))
-    page_start = (page_size * (page_num - 1))
+    try: 
+        page_num, page_size = 1, 3
+        if request.args.get('pn'):
+            page_num = int(request.args.get('pn'))
+        if request.args.get('ps'):
+            page_size = int(request.args.get('ps'))
+        page_start = (page_size * (page_num - 1))
 
-    data_to_return = []
-    for listing in listings.find().skip(page_start).limit(page_size):
-        listing['_id'] = str(listing['_id'])
+        if page_num < 1 or page_size < 1:
+            return make_response(
+                jsonify({"error": "Invalid pagination parameters"}), 400)
         
-        # Convert the host _id and each _id in current_listings to strings
-        if 'host' in listing and isinstance(listing['host'], dict):
-            listing['host']['_id'] = str(listing['host']['_id'])
-            if 'current_listings' in listing['host']:
-                listing['host']['current_listings'] = [str(listing_id) for listing_id in listing['host']['current_listings']]
-        
-        # Convert review _id fields and user_id fields in reviews to strings
-        if 'reviews' in listing:
-            for review in listing['reviews']:
-                review['_id'] = str(review['_id'])
-                review['user_id'] = str(review['user_id'])
-        
-        data_to_return.append(listing)
+        query = {}
 
-    return make_response(jsonify(data_to_return), 200)
+        # match specific params
+        if 'neighbourhood' in request.args:
+            query['neighbourhood'] = request.args['neighbourhood']
+        
+        if 'room_type' in request.args:
+            query['room_type'] = request.args['room_type']
+
+        # Numeric greater than or equal queries
+        numeric_gte_fields = {
+            'accommodates': 'accommodates',
+            'bathrooms': 'bathrooms',
+            'bedrooms': 'bedrooms',
+            'rating_min': 'review_scores_rating'
+        }
+
+        for param, field in numeric_gte_fields.items():
+            if param in request.args:
+                query[field] = {'$gte': float(request.args[param])}
+
+        # Handle ratings 
+        if 'rating_max' in request.args:
+            if 'review_scores_rating' in query:
+                query['review_scores_rating']['$lte'] = float(request.args['rating_max'])
+            else:
+                query['review_scores_rating'] = {'$lte': float(request.args['rating_max'])}
+
+        # Handle price ranges
+        price_conditions = []
+        if 'price_min' in request.args:
+            price_conditions.append({'price': {'$gte': float(request.args['price_min'])}})
+        if 'price_max' in request.args:
+            price_conditions.append({'price': {'$lte': float(request.args['price_max'])}})
+        
+        # Check how many price conditions are given if 1 add it to query if 2 then combine conditions that the listing must match
+        if price_conditions:
+            if len(price_conditions) == 1:
+                query.update(price_conditions[0])
+            else:
+                query['$and'] = price_conditions
+
+        # Execute query with pagination
+        data_to_return = []
+        for listing in listings.find(query).skip(page_start).limit(page_size):
+            listing['_id'] = str(listing['_id'])
+            
+            # Convert the host _id to a string
+            if 'host' in listing and isinstance(listing['host'], dict):
+                listing['host']['_id'] = str(listing['host']['_id'])
+            
+            # Convert review _id fields and user_id fields in reviews to strings
+            if 'reviews' in listing:
+                for review in listing['reviews']:
+                    review['_id'] = str(review['_id'])
+                    review['user_id'] = str(review['user_id'])
+            
+            data_to_return.append(listing)
+
+        return make_response(jsonify(data_to_return), 200)
+    except Exception:
+        return make_response(jsonify({"error": "An error occurred getting listings"}), 500)
 
 @listings_bp.route("/api/v1.0/listings/<string:id>", methods=["GET"])
 def show_one_listing(id):
@@ -47,7 +95,7 @@ def show_one_listing(id):
     if listing is not None:
         listing['_id'] = str(listing['_id'])
 
-        # Convert the host _id and each _id in current_listings to strings
+        # Convert the host _id to string
         if 'host' in listing:
             if '_id' in listing['host']:
                 listing['host']['_id'] = str(listing['host']['_id'])
@@ -64,11 +112,11 @@ def show_one_listing(id):
         return make_response(jsonify({"error" : "Invalid listing ID"}))
     
 
-
-
 @listings_bp.route('/api/v1.0/listings', methods=['POST'])
 @role_required('host')
 def create_listing():
+    # When a host creates a listing need to add it to their current_listings in host collection, also remove after removing a listing
+
     host_info = {}
 
     required_fields = [
@@ -143,6 +191,13 @@ def create_listing():
         }
 
         new_listing_id = listings.insert_one(new_listing)
+
+        # Add the listing ID to the host's current_listings
+        hosts.update_one(
+            {"_id": ObjectId(host_id)},
+            {"$push": {"current_listings": new_listing_id.inserted_id}}  # Use the inserted_id here
+        )
+
         new_listing_link = "http://127.0.0.1:5000/api/v1.0/listings/" \
         + str(new_listing_id.inserted_id)
         return make_response(jsonify({"url" : new_listing_link}), 201)
@@ -159,8 +214,22 @@ def edit_listing(id):
         "review_scores_rating", "review_scores_location", "location", "neighbourhood"
     ]
 
-    update_fields = {}
+    # Decode the token to get the host_id and from that get the hosts record
+    token = request.headers.get('x-access-token')
+    decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
+    host_id = decoded['host_id']
+
+    # Retrieve the listing from the database
+    listing = listings.find_one({"_id": ObjectId(id)})
+    if not listing:
+        return make_response(jsonify({"error": "Listing not found"}), 404)
+
+
+     # validate if the user is the owner of the review
+    if str(listing["host"]["_id"]) != host_id:
+        return make_response(jsonify({"Permission Denied": "User can only edit reviews belonging to them"}), 403)
     
+    update_fields = {}
     for field in fields_in_listing:
         if field in request.form:
             if field == "amenities":
@@ -176,14 +245,28 @@ def edit_listing(id):
         edited_listing_link = "http://127.0.0.1:5000/api/v1.0/listings/" + id
         return make_response(jsonify({"url" : edited_listing_link}), 200)
     else:
-        return make_response(jsonify({"error" : "Invalid Business id"}))
+        return make_response(jsonify({"error" : "Invalid Listing id"}))
     
 @listings_bp.route("/api/v1.0/listings/<string:id>", methods=["DELETE"])
 @jwt_required
 @admin_required
 def delete_business(id):
-    result = listings.delete_one({ "_id" : ObjectId(id)})
+    # First, find the listing to retrieve the host_id
+    listing = listings.find_one({"_id": ObjectId(id)})
+    if listing is None:
+        return make_response(jsonify({"Error": "Listing not found"}), 404)
+
+    # Now that we have the listing, we can get the host_id
+    host_id = listing["host"]["_id"]
+
+    # Now delete the listing
+    result = listings.delete_one({"_id": ObjectId(id)})
+    
     if result.deleted_count == 1:
+        # Remove the listing from the host's current_listings
+        hosts.update_one({"_id": ObjectId(host_id)}, {"$pull": {"current_listings": ObjectId(id)}})
+        
         return make_response(jsonify({}), 204)
     else:
-        return make_response(jsonify({"Error" : "Listing not found"}), 404)
+        return make_response(jsonify({"Error": "Failed to delete listing"}), 500)
+
