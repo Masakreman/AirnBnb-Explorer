@@ -6,6 +6,7 @@ from blueprints.reviews.reviews import reviews_bp
 from blueprints.geo.locations import locations_bp
 from blueprints.users.users import users_bp
 from blueprints.hosts.hosts import hosts_bp
+from blueprints.operations.operations import operations_bp
 
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ app.register_blueprint(reviews_bp)
 app.register_blueprint(locations_bp)
 app.register_blueprint(users_bp)
 app.register_blueprint(hosts_bp)
+app.register_blueprint(operations_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)

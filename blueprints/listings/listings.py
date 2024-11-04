@@ -10,6 +10,8 @@ listings_bp = Blueprint('listings_bp', __name__)
 listings = globals.listings
 hosts = globals.hosts
 neighbourhoods = globals.neighbourhoods
+operations = globals.operations
+log_operation = globals.log_operation
 
 @listings_bp.route("/api/v1.0/listings", methods=["GET"])
 def show_all_listings():
@@ -92,6 +94,9 @@ def show_all_listings():
 def show_one_listing(id):
     listing = listings.find_one({'_id' : ObjectId(id)})
 
+    if not listing:
+        return make_response(jsonify({"error": "Listing not found"}), 404)
+
     if listing is not None:
         listing['_id'] = str(listing['_id'])
 
@@ -102,16 +107,14 @@ def show_one_listing(id):
         
         # Convert review _id fields and user_id fields in reviews to strings
         if 'reviews' in listing:
-            if '_id' in listing['reviews']:
-                for review in listing['reviews']:
-                    review['_id'] = str(review['_id'])
-                    review['user_id'] = str(review['user_id'])
+            for review in listing['reviews']:
+                review['_id'] = str(review['_id'])
+                review['user_id'] = str(review['user_id'])
         
         return make_response(jsonify(listing), 200)
     else:
         return make_response(jsonify({"error" : "Invalid listing ID"}))
     
-
 @listings_bp.route('/api/v1.0/listings', methods=['POST'])
 @role_required('host')
 def create_listing():
@@ -129,6 +132,7 @@ def create_listing():
     token = request.headers.get('x-access-token')
     decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
     host_id = decoded['host_id']
+    role = decoded['role']
     host_info = hosts.find_one({'_id' : ObjectId(host_id)})
 
     if host_info:
@@ -166,6 +170,11 @@ def create_listing():
         return make_response(jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400)
     
     try:
+        price = float(request.form["price"])  # Attempt to convert price to a float
+    except ValueError:
+        return make_response(jsonify({"error": "Invalid data type"}), 400)
+    
+    try:
         new_listing = {
             "listing_url": "",
             "picture_url": "",
@@ -192,18 +201,22 @@ def create_listing():
 
         new_listing_id = listings.insert_one(new_listing)
 
+        id = new_listing_id.inserted_id
+
         # Add the listing ID to the host's current_listings
         hosts.update_one(
             {"_id": ObjectId(host_id)},
             {"$push": {"current_listings": new_listing_id.inserted_id}}  # Use the inserted_id here
         )
 
+        # After adding a new listing
+        log_operation("create_listing", id, host_id, role)
+
         new_listing_link = "http://127.0.0.1:5000/api/v1.0/listings/" \
         + str(new_listing_id.inserted_id)
         return make_response(jsonify({"url" : new_listing_link}), 201)
     except ValueError:
         return make_response(jsonify({"error" : "Missing or invalud form data"}), 400)
-
 
 @listings_bp.route("/api/v1.0/listings/<string:id>", methods=["PUT"])
 @role_required('host')
@@ -217,6 +230,7 @@ def edit_listing(id):
     # Decode the token to get the host_id and from that get the hosts record
     token = request.headers.get('x-access-token')
     decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
+    role = decoded['role']
     host_id = decoded['host_id']
 
     # Retrieve the listing from the database
@@ -242,6 +256,10 @@ def edit_listing(id):
     result = listings.update_one({'_id': ObjectId(id)}, {"$set": update_fields})
 
     if result.matched_count == 1:
+
+        # After editing a listing
+        log_operation("edit_listing", id, host_id, role)
+
         edited_listing_link = "http://127.0.0.1:5000/api/v1.0/listings/" + id
         return make_response(jsonify({"url" : edited_listing_link}), 200)
     else:
@@ -250,7 +268,11 @@ def edit_listing(id):
 @listings_bp.route("/api/v1.0/listings/<string:id>", methods=["DELETE"])
 @jwt_required
 @admin_required
-def delete_business(id):
+def delete_listing(id):
+    token = request.headers.get('x-access-token')
+    decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
+    admin_id = decoded['user_id']
+
     # First, find the listing to retrieve the host_id
     listing = listings.find_one({"_id": ObjectId(id)})
     if listing is None:
@@ -265,8 +287,131 @@ def delete_business(id):
     if result.deleted_count == 1:
         # Remove the listing from the host's current_listings
         hosts.update_one({"_id": ObjectId(host_id)}, {"$pull": {"current_listings": ObjectId(id)}})
+
+        # deleting a listing
+        log_operation("delete_listing", id, admin_id, "admin")
         
         return make_response(jsonify({}), 204)
     else:
         return make_response(jsonify({"Error": "Failed to delete listing"}), 500)
 
+@listings_bp.route("/api/v1.0/listings/totalPages", methods=["GET"])
+def total_pages():
+    page_num, page_size = 1, 3
+    if request.args.get('pn'):
+        page_num = int(request.args.get('pn'))
+    if request.args.get('ps'):
+        page_size = int(request.args.get('ps'))
+
+    if page_num < 1 or page_size < 1:
+        return make_response(
+            jsonify({"error": "Invalid pagination parameters"}), 400)
+    
+    total_listings = listings.count_documents({})
+
+    total_pages = (total_listings + page_size - 1) // page_size
+
+    response = {
+        "Listings per Page": page_size,
+        "Current Page": page_num,
+        "Total pages Needed": total_pages,
+        "Total listings": total_listings
+    }
+
+    return make_response(jsonify(response), 200)
+
+@listings_bp.route("/api/v1.0/listings/priceRangeSummary", methods=["GET"])
+def price_range_summary():
+    try:
+        price_ranges = [
+            {"min": 0, "max": 50, "label": "$0-$50"},
+            {"min": 50, "max": 100, "label": "$50-$100"},
+            {"min": 100, "max": 150, "label": "$100-$150"},
+            {"min": 150, "max": 200, "label": "$150-$200"},
+            {"min": 200, "max": 300, "label": "$200-$300"},
+            {"min": 300, "max": 500, "label": "$300-$500"},
+            {"min": 500, "max": 1000, "label": "$500-$1000"},
+        ]
+
+        # Create boundaries list
+        boundaries = [range["min"] for range in price_ranges] # Get each min value from price ranges
+        boundaries.append(price_ranges[-1]["max"])  # Upper Boundary
+
+        pipeline = [
+            {
+                "$addFields": {
+                    "price_as_number": {
+                        "$convert": {
+                            "input": "$price",
+                            "to": "decimal",
+                            "onError": None,  # Error handling for conversion to decimal value
+                            "onNull": None
+                        }
+                    }
+                }
+            },
+            {
+                "$match": {
+                    "price_as_number": {"$ne": None}  # Filter out any invalid Prices (there shouldnt be any but just in case)
+                }
+            },
+            {
+                # using the a bucket to group documents by $price_as_number which is decimal price
+                "$bucket": {
+                    "groupBy": "$price_as_number",
+                    "boundaries": boundaries,
+                    "default": "Over $1000", # Values that dont fit into boundaries are classed by 1000+ by default
+                    "output": {
+                        "count": {"$sum": 1}, # Get number of docs in each bucket i.e in each boundary
+                        "listings": {
+                            "$push": { # store basic information for each listing
+                                "id": "$_id",
+                                "name": "$name",
+                                "price": "$price"
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+
+        # Run the aggregation pipeline
+        result = list(listings.aggregate(pipeline))
+
+        # Format the response with corresponding labels and additional info
+        formatted_response = []
+
+        # iterate over each item in the pipeline output (result) 
+        # Each range_data corresponds to a bucket created in agrregation pipeline i.e couts of listings in each price range
+        for i, range_data in enumerate(result):
+            if isinstance(range_data["_id"], str):  # Handle over 1000 cases 
+                range_info = {
+                    "range": range_data["_id"],
+                    "min": 1000,
+                    "max": None,
+                }
+            else:
+                range_info = { # Range dictionary to store all other price range buckets
+                    "range": price_ranges[i]["label"],
+                    "min": price_ranges[i]["min"],
+                    "max": price_ranges[i]["max"],
+                }
+
+            # Convert ObjectId to string for each listing in the current range
+            listings_with_string_ids = []
+            for listing in range_data["listings"]:
+                listing["id"] = str(listing["id"])  # Convert ObjectId to string
+                listings_with_string_ids.append(listing)
+            
+            formatted_response.append({ # for each price range we have a new dictionary
+                **range_info, # get contents of range_info using unpacking operator ** to get its key-value pairs
+                "count": range_data["count"], # count listings in this price range
+                "percentage": round((range_data["count"] / listings.count_documents({})) * 100, 2), # Calculate a percentage value of listings in this range vs Overall to 2 decimal palces
+                "listings": listings_with_string_ids # Array of detailed listing information i.e _id, name, price
+            })
+
+        return make_response(jsonify({"data": formatted_response, "total_listings": listings.count_documents({})}), 200)
+
+    except Exception:
+        return make_response(jsonify({"error": "An error Occurred "}), 500)
+    
