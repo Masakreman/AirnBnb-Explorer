@@ -9,6 +9,8 @@ reviews_bp = Blueprint('reviews_bp', __name__)
 
 listings = globals.listings
 users = globals.users
+operations = globals.operations
+log_operation = globals.log_operation
 
 @reviews_bp.route("/api/v1.0/listings/<string:id>/reviews", methods=["GET"])
 def show_all_reviews(id):
@@ -42,14 +44,14 @@ def show_all_reviews(id):
 @role_required('user')
 @jwt_required
 def create_review(l_id):
-
     required_fields = [
         "comments"
     ]
 
-    # Decode the token to get the host_id
+    # Decode the token to get the host_id and role
     token = request.headers.get('x-access-token')
     decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
+    role = decoded['role']
     user_id = decoded['user_id']
 
     # Get users info
@@ -87,6 +89,7 @@ def create_review(l_id):
         # Add _id of the review to the users collection user_reviews array
         user_result = users.update_one({"_id": ObjectId(user_id)}, {"$push": {"user_reviews": review_id}})
 
+
         if user_result.modified_count == 0:
             # If user update failed, you might want to roll back the listing update
             listings.update_one(
@@ -95,13 +98,15 @@ def create_review(l_id):
             )
             return make_response(jsonify({"error": "Failed to update user reviews"}), 500)
         
+        # After adding a new review
+        log_operation("create_review", review_id, user_id, role)
+        
         new_review_link = f"http://127.0.0.1:5000/api/v1.0/listings/{l_id}/reviews/{new_review['_id']}"
         return make_response(jsonify({"url" : new_review_link}), 201)
 
     except (ValueError, TypeError):
         return make_response(jsonify({"error": "Invalid form data"}), 400)
     
-
 @reviews_bp.route("/api/v1.0/listings/<string:l_id>/reviews/<string:r_id>", methods=["PUT"])
 @role_required('user')
 def edit_review(l_id, r_id):
@@ -109,6 +114,7 @@ def edit_review(l_id, r_id):
     # Decode the token to get the user_id
     token = request.headers.get('x-access-token')
     decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
+    role = decoded['role']
     user_id = decoded['user_id']
 
     # Find the listing with the given review
@@ -134,6 +140,9 @@ def edit_review(l_id, r_id):
 
     if result.matched_count == 0:
         return make_response(jsonify({"error": "Failed to update review"}), 500)
+
+    # After adding a new review
+    log_operation("edit_review", r_id, user_id, role)
 
     # Return the URL of the edited review
     edited_review_url = f"http://127.0.0.1:5000/api/v1.0/listings/{l_id}/reviews/{r_id}"
@@ -164,6 +173,10 @@ def show_one_review(l_id, r_id):
 @jwt_required
 @admin_required
 def delete_review(l_id, r_id):
+    token = request.headers.get('x-access-token')
+    decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
+    admin_id = decoded['user_id']
+
     # Retrieve the review to get the user_id
     review = listings.find_one(
         {"_id": ObjectId(l_id), "reviews._id": ObjectId(r_id)},
@@ -188,6 +201,9 @@ def delete_review(l_id, r_id):
         {"_id": ObjectId(user_id)},
         {"$pull": {"user_reviews": ObjectId(r_id)}}
     )
+
+    # After deleting a review
+    log_operation("delete_review", r_id, admin_id, "admin")
 
     return make_response(jsonify({}), 204)
 

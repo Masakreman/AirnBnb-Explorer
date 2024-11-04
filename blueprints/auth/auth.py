@@ -14,6 +14,12 @@ blacklist = globals.blacklist
 
 @auth_bp.route('/api/v1.0/register/user', methods=['POST'])
 def registerUser():
+
+    # Check if a user with this name already exists
+    if users.find_one({"user_name": request.form['user_name']}):
+        return make_response(jsonify({"error": "user name already exists. Please choose a different name."}), 400)
+
+
     required_fields = [
         "user_name", "password"
     ]
@@ -41,9 +47,12 @@ def registerUser():
     except ValueError:
         return make_response(jsonify({"error": "Missing or invalid form data"}), 400)
     
-
 @auth_bp.route('/api/v1.0/register/host', methods=['POST'])
 def registerHost():
+    # Check if a host with this name already exists
+    if hosts.find_one({"host_name": request.form['host_name']}):
+        return make_response(jsonify({"error": "Host name already exists. Please choose a different name."}), 400)
+
     required_fields = [
         "host_name", "password"
     ]
@@ -79,7 +88,6 @@ def registerHost():
     except ValueError:
         return make_response(jsonify({"error": "Missing or invalid form data"}), 400)
 
-
 @auth_bp.route('/api/v1.0/login', methods=['GET'])
 def login():
     auth = request.authorization
@@ -100,7 +108,7 @@ def login():
                 }, globals.secret_key, algorithm="HS256")
                 return make_response(jsonify({'token': token}), 200)
             else:
-                return make_response(jsonify({'message': 'Bad password'}), 401)
+                return make_response(jsonify({'message': 'Bad username or password'}), 401)
         
         # Check in hosts collection if user not found in users
         host = hosts.find_one({'host_name': auth.username})
@@ -120,7 +128,7 @@ def login():
         # If no user or host found
         return make_response(jsonify({'message': 'Bad username or password'}), 401)
 
-    return make_response(jsonify({'message': 'Authentication required'}), 401)
+    return make_response(jsonify({'message': 'Authentication required'}), 403)
 
 @auth_bp.route('/api/v1.0/logout', methods=["GET"])
 @jwt_required
