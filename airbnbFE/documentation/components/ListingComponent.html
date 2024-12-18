@@ -1,0 +1,2415 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>airbnb-fe documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">airbnb-fe documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  ListingComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/listing.component.ts</code>
+</p>
+
+
+    <p class="comment">
+        <h3>Description</h3>
+    </p>
+    <p class="comment">
+        <p>Component representing a listing with its details, reviews, and related functionalities.</p>
+
+    </p>
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">providers</td>
+                <td class="col-md-9">
+                                <code><a href="../injectables/DataService.html" target="_self" >DataService</a></code>
+                                <code><a href="../injectables/WebService.html" target="_self" >WebService</a></code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>listing</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">imports</td>
+                <td class="col-md-9">
+                            <code>RouterOutlet</code>
+                            <code>CommonModule</code>
+                            <code>GoogleMapsModule</code>
+                            <code>ReactiveFormsModule</code>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./listing.component.css</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./listing.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#authService" >authService</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#dataService" >dataService</a>
+                            </li>
+                            <li>
+                                <a href="#editForm" >editForm</a>
+                            </li>
+                            <li>
+                                <a href="#isEditing" >isEditing</a>
+                            </li>
+                            <li>
+                                <a href="#listing_lat" >listing_lat</a>
+                            </li>
+                            <li>
+                                <a href="#listing_list" >listing_list</a>
+                            </li>
+                            <li>
+                                <a href="#listing_lng" >listing_lng</a>
+                            </li>
+                            <li>
+                                <a href="#loremIpsum" >loremIpsum</a>
+                            </li>
+                            <li>
+                                <a href="#map_locations" >map_locations</a>
+                            </li>
+                            <li>
+                                <a href="#map_options" >map_options</a>
+                            </li>
+                            <li>
+                                <a href="#Math" >Math</a>
+                            </li>
+                            <li>
+                                <a href="#review_list" >review_list</a>
+                            </li>
+                            <li>
+                                <a href="#reviewForm" >reviewForm</a>
+                            </li>
+                            <li>
+                                <a href="#temperature" >temperature</a>
+                            </li>
+                            <li>
+                                <a href="#temperatureColour" >temperatureColour</a>
+                            </li>
+                            <li>
+                                <a href="#weather" >weather</a>
+                            </li>
+                            <li>
+                                <a href="#weatherIcon" >weatherIcon</a>
+                            </li>
+                            <li>
+                                <a href="#weatherIconURL" >weatherIconURL</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getCurrentDate" >getCurrentDate</a>
+                            </li>
+                            <li>
+                                <a href="#initializeForms" >initializeForms</a>
+                            </li>
+                            <li>
+                                <a href="#isIncomplete" >isIncomplete</a>
+                            </li>
+                            <li>
+                                <a href="#isInvalid" >isInvalid</a>
+                            </li>
+                            <li>
+                                <a href="#isUntouched" >isUntouched</a>
+                            </li>
+                            <li>
+                                <a href="#loadListingData" >loadListingData</a>
+                            </li>
+                            <li>
+                                <a href="#loadReviews" >loadReviews</a>
+                            </li>
+                            <li>
+                                <a href="#loadWeatherData" >loadWeatherData</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#onDelete" >onDelete</a>
+                            </li>
+                            <li>
+                                <a href="#onSubmit" >onSubmit</a>
+                            </li>
+                            <li>
+                                <a href="#onUpdate" >onUpdate</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#refreshListing" >refreshListing</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#refreshReviews" >refreshReviews</a>
+                            </li>
+                            <li>
+                                <a href="#setupMapAndWeather" >setupMapAndWeather</a>
+                            </li>
+                            <li>
+                                <a href="#toggleEdit" >toggleEdit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-constructor">
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(dataService: <a href="../injectables/DataService.html" target="_self">DataService</a>, route: ActivatedRoute, router: Router, formBuilder: FormBuilder, authService: AuthService, webService: <a href="../injectables/WebService.html" target="_self">WebService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/listing.component.ts:38</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><p>Initializes the component with necessary services.</p>
+</div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                                    <td>Description</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>dataService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/DataService.html" target="_self" >DataService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Service for data operations.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>route</td>
+                                                  
+                                                        <td>
+                                                                    <code>ActivatedRoute</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Activated route to get route parameters.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>router</td>
+                                                  
+                                                        <td>
+                                                                    <code>Router</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Router for navigation.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>formBuilder</td>
+                                                  
+                                                        <td>
+                                                                    <code>FormBuilder</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Form builder for reactive forms.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>authService</td>
+                                                  
+                                                        <td>
+                                                                    <code>AuthService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Authentication service.</p>
+
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td>webService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/WebService.html" target="_self" >WebService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <p>Web service for API calls.</p>
+
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCurrentDate"></a>
+                    <span class="name">
+                        <span ><b>getCurrentDate</b></span>
+                        <a href="#getCurrentDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCurrentDate()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="262"
+                                    class="link-to-prism">src/app/listing.component.ts:262</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Gets the current date in YYYY-MM-DD format.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The current date as a string.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initializeForms"></a>
+                    <span class="name">
+                        <span ><b>initializeForms</b></span>
+                        <a href="#initializeForms"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initializeForms()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="70"
+                                    class="link-to-prism">src/app/listing.component.ts:70</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Initializes the review and edit forms with default values and validators.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isIncomplete"></a>
+                    <span class="name">
+                        <span ><b>isIncomplete</b></span>
+                        <a href="#isIncomplete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isIncomplete()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="313"
+                                    class="link-to-prism">src/app/listing.component.ts:313</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Checks if the review form is incomplete.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>True if the form is invalid or untouched, false otherwise.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isInvalid"></a>
+                    <span class="name">
+                        <span ><b>isInvalid</b></span>
+                        <a href="#isInvalid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isInvalid(control: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="295"
+                                    class="link-to-prism">src/app/listing.component.ts:295</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Checks if a form control is invalid and has been touched.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>control</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>The name of the form control.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>True if the control is invalid and touched, false otherwise.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isUntouched"></a>
+                    <span class="name">
+                        <span ><b>isUntouched</b></span>
+                        <a href="#isUntouched"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isUntouched()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="304"
+                                    class="link-to-prism">src/app/listing.component.ts:304</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Checks if the review form controls are untouched.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>True if the form controls are pristine, false otherwise.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadListingData"></a>
+                    <span class="name">
+                        <span ><b>loadListingData</b></span>
+                        <a href="#loadListingData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadListingData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="99"
+                                    class="link-to-prism">src/app/listing.component.ts:99</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Loads listing data from the web service and sets up the map and weather information.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadReviews"></a>
+                    <span class="name">
+                        <span ><b>loadReviews</b></span>
+                        <a href="#loadReviews"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadReviews()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="136"
+                                    class="link-to-prism">src/app/listing.component.ts:136</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Loads reviews for the current listing from the web service.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loadWeatherData"></a>
+                    <span class="name">
+                        <span ><b>loadWeatherData</b></span>
+                        <a href="#loadWeatherData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>loadWeatherData()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="168"
+                                    class="link-to-prism">src/app/listing.component.ts:168</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Loads current weather data for the listing&#39;s location from the data service.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="62"
+                                    class="link-to-prism">src/app/listing.component.ts:62</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Lifecycle hook that is called after data-bound properties are initialized.
+Initializes forms and loads listing data.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onDelete"></a>
+                    <span class="name">
+                        <span ><b>onDelete</b></span>
+                        <a href="#onDelete"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onDelete()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="219"
+                                    class="link-to-prism">src/app/listing.component.ts:219</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Deletes the current listing after user confirmation.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>void</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onSubmit"></a>
+                    <span class="name">
+                        <span ><b>onSubmit</b></span>
+                        <a href="#onSubmit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onSubmit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="239"
+                                    class="link-to-prism">src/app/listing.component.ts:239</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Submits a new review for the listing.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>void</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="onUpdate"></a>
+                    <span class="name">
+                        <span ><b>onUpdate</b></span>
+                        <a href="#onUpdate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>onUpdate()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="195"
+                                    class="link-to-prism">src/app/listing.component.ts:195</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Updates the listing with the values from the edit form.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>void</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="refreshListing"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>refreshListing</b></span>
+                        <a href="#refreshListing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>refreshListing()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="282"
+                                    class="link-to-prism">src/app/listing.component.ts:282</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Refreshes the listing data.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>void</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="refreshReviews"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>refreshReviews</b></span>
+                        <a href="#refreshReviews"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>refreshReviews()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="270"
+                                    class="link-to-prism">src/app/listing.component.ts:270</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Refreshes the reviews for the listing.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>void</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setupMapAndWeather"></a>
+                    <span class="name">
+                        <span ><b>setupMapAndWeather</b></span>
+                        <a href="#setupMapAndWeather"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setupMapAndWeather()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="147"
+                                    class="link-to-prism">src/app/listing.component.ts:147</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Sets up the map and weather information based on the listing&#39;s location.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toggleEdit"></a>
+                    <span class="name">
+                        <span ><b>toggleEdit</b></span>
+                        <a href="#toggleEdit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toggleEdit()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="183"
+                                    class="link-to-prism">src/app/listing.component.ts:183</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Toggles the edit mode for the listing.
+Resets the form with current values when canceling edit.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="authService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>authService</b></span>
+                        <a href="#authService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>AuthService</code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/app/listing.component.ts:54</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description">Authentication service.</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dataService"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>dataService</b></span>
+                        <a href="#dataService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../injectables/DataService.html" target="_self" >DataService</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/listing.component.ts:50</a></div>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description">Service for data operations.</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editForm"></a>
+                    <span class="name">
+                        <span ><b>editForm</b></span>
+                        <a href="#editForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/listing.component.ts:36</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isEditing"></a>
+                    <span class="name">
+                        <span ><b>isEditing</b></span>
+                        <a href="#isEditing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/app/listing.component.ts:37</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listing_lat"></a>
+                    <span class="name">
+                        <span ><b>listing_lat</b></span>
+                        <a href="#listing_lat"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/app/listing.component.ts:25</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listing_list"></a>
+                    <span class="name">
+                        <span ><b>listing_list</b></span>
+                        <a href="#listing_list"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="23" class="link-to-prism">src/app/listing.component.ts:23</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listing_lng"></a>
+                    <span class="name">
+                        <span ><b>listing_lng</b></span>
+                        <a href="#listing_lng"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/listing.component.ts:26</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="loremIpsum"></a>
+                    <span class="name">
+                        <span ><b>loremIpsum</b></span>
+                        <a href="#loremIpsum"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/listing.component.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="map_locations"></a>
+                    <span class="name">
+                        <span ><b>map_locations</b></span>
+                        <a href="#map_locations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>any[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[]</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/listing.component.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="map_options"></a>
+                    <span class="name">
+                        <span ><b>map_options</b></span>
+                        <a href="#map_options"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>google.maps.MapOptions</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{}</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/listing.component.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="Math"></a>
+                    <span class="name">
+                        <span ><b>Math</b></span>
+                        <a href="#Math"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>Math</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/app/listing.component.ts:38</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="review_list"></a>
+                    <span class="name">
+                        <span ><b>review_list</b></span>
+                        <a href="#review_list"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/app/listing.component.ts:24</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="reviewForm"></a>
+                    <span class="name">
+                        <span ><b>reviewForm</b></span>
+                        <a href="#reviewForm"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/listing.component.ts:35</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="temperature"></a>
+                    <span class="name">
+                        <span ><b>temperature</b></span>
+                        <a href="#temperature"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/listing.component.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="temperatureColour"></a>
+                    <span class="name">
+                        <span ><b>temperatureColour</b></span>
+                        <a href="#temperatureColour"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/app/listing.component.ts:34</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="weather"></a>
+                    <span class="name">
+                        <span ><b>weather</b></span>
+                        <a href="#weather"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/listing.component.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="weatherIcon"></a>
+                    <span class="name">
+                        <span ><b>weatherIcon</b></span>
+                        <a href="#weatherIcon"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/listing.component.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="weatherIconURL"></a>
+                    <span class="name">
+                        <span ><b>weatherIconURL</b></span>
+                        <a href="#weatherIconURL"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/listing.component.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+import { RouterOutlet, ActivatedRoute, Router } from &#x27;@angular/router&#x27;;
+import { DataService } from &#x27;./data.service&#x27;;
+import { CommonModule } from &#x27;@angular/common&#x27;;
+import { GoogleMapsModule } from &#x27;@angular/google-maps&#x27;;
+import { Form, ReactiveFormsModule } from &#x27;@angular/forms&#x27;;
+import { FormBuilder, Validators } from &#x27;@angular/forms&#x27;
+import { AuthService } from &#x27;@auth0/auth0-angular&#x27;;
+import { WebService } from &#x27;./web.service&#x27;;
+
+/**
+ * Component representing a listing with its details, reviews, and related functionalities.
+ */
+@Component({
+    selector: &#x27;listing&#x27;,
+    standalone: true,
+    imports: [RouterOutlet, CommonModule, GoogleMapsModule, ReactiveFormsModule],
+    providers: [DataService, WebService],
+    templateUrl: &#x27;./listing.component.html&#x27;,
+    styleUrls: [&#x27;./listing.component.css&#x27;]
+})
+export class ListingComponent {
+    listing_list: any;
+    review_list: any;
+    listing_lat: any;
+    listing_lng: any;
+    map_options: google.maps.MapOptions &#x3D; {};
+    map_locations: any[] &#x3D; [];
+    loremIpsum: any;
+    temperature: any;
+    weather: any;
+    weatherIcon: any;
+    weatherIconURL: any;
+    temperatureColour: any;
+    reviewForm: any;
+    editForm: any;
+    isEditing: boolean &#x3D; false;
+    Math &#x3D; Math;
+
+    /**
+     * Initializes the component with necessary services.
+     * @param dataService Service for data operations.
+     * @param route Activated route to get route parameters.
+     * @param router Router for navigation.
+     * @param formBuilder Form builder for reactive forms.
+     * @param authService Authentication service.
+     * @param webService Web service for API calls.
+     */
+    constructor(
+        public dataService: DataService, 
+        private route: ActivatedRoute,
+        private router: Router,
+        private formBuilder: FormBuilder, 
+        public authService: AuthService, 
+        private webService: WebService
+    ) {}
+
+    /**
+     * Lifecycle hook that is called after data-bound properties are initialized.
+     * Initializes forms and loads listing data.
+     */
+    ngOnInit() {
+        this.initializeForms();
+        this.loadListingData();
+    }
+
+    /**
+     * Initializes the review and edit forms with default values and validators.
+     */
+    initializeForms() {
+        this.reviewForm &#x3D; this.formBuilder.group({
+            user_name: [&#x27;&#x27;, Validators.required],
+            comments: [&#x27;&#x27;, Validators.required],
+            date: this.getCurrentDate()
+        });
+
+        this.editForm &#x3D; this.formBuilder.group({
+            name: [&#x27;&#x27;, Validators.required],
+            description: [&#x27;&#x27;],
+            property_type: [&#x27;&#x27;],
+            room_type: [&#x27;&#x27;],
+            accomodates: [&#x27;&#x27;],
+            bathrooms: [&#x27;&#x27;],
+            bedrooms: [&#x27;&#x27;],
+            beds: [&#x27;&#x27;],
+            amenities: [&#x27;&#x27;],
+            price: [&#x27;&#x27;],
+            minimum_nights: [&#x27;&#x27;],
+            maximum_nights: [&#x27;&#x27;],
+            review_scores_rating: [&#x27;&#x27;, [Validators.required, Validators.min(0), Validators.max(5)]],
+            review_scores_location: [&#x27;&#x27;],
+            neighbourhood: [&#x27;&#x27;]
+        });
+    }
+
+    /**
+     * Loads listing data from the web service and sets up the map and weather information.
+     */
+    loadListingData() {
+        this.webService.getListing(this.route.snapshot.paramMap.get(&#x27;id&#x27;)).subscribe((response: any) &#x3D;&gt; {
+            this.listing_list &#x3D; [response];
+            this.setupMapAndWeather();
+            
+            // Populate edit form with current values
+            this.editForm.patchValue({
+                name: this.listing_list[0].name,
+                description: this.listing_list[0].description,
+                property_type: this.listing_list[0].property_type,
+                room_type: this.listing_list[0].room_type,
+                accomodates: this.listing_list[0].accomodates,
+                bathrooms: this.listing_list[0].bathrooms,
+                bedrooms: this.listing_list[0].bedrooms,
+                beds: this.listing_list[0].beds,
+                amenities: Array.isArray(this.listing_list[0].amenities) 
+                    ? this.listing_list[0].amenities.join(&#x27;,&#x27;) 
+                    : this.listing_list[0].amenities,
+                price: this.listing_list[0].price,
+                minimum_nights: this.listing_list[0].minimum_nights,
+                maximum_nights: this.listing_list[0].maximum_nights,
+                review_scores_rating: this.listing_list[0].review_scores_rating,
+                review_scores_location: this.listing_list[0].review_scores_location,
+                neighbourhood: this.listing_list[0].neighbourhood
+            });
+
+            this.dataService.getLoremIpsum(1).subscribe((response: any) &#x3D;&gt; {
+                this.loremIpsum &#x3D; response.text.slice(0, 200);
+            });
+        });
+
+        this.loadReviews();
+    }
+
+    /**
+     * Loads reviews for the current listing from the web service.
+     */
+    loadReviews() {
+        this.webService.getReviews(
+            this.route.snapshot.paramMap.get(&#x27;id&#x27;))
+            .subscribe((response) &#x3D;&gt; {
+                this.review_list &#x3D; response;
+            });
+    }
+
+    /**
+     * Sets up the map and weather information based on the listing&#x27;s location.
+     */
+    setupMapAndWeather() {
+        this.listing_lat &#x3D; this.listing_list[0].location.coordinates[1];
+        this.listing_lng &#x3D; this.listing_list[0].location.coordinates[0];
+
+        this.map_locations &#x3D; [{
+            lat: this.listing_lat,
+            lng: this.listing_lng
+        }];
+
+        this.map_options &#x3D; {
+            mapId: &quot;DEMO_MAP_ID&quot;,
+            center: { lat: this.listing_lat, lng: this.listing_lng },
+            zoom: 13,
+        };
+
+        this.loadWeatherData();
+    }
+
+    /**
+     * Loads current weather data for the listing&#x27;s location from the data service.
+     */
+    loadWeatherData() {
+        this.dataService.getCurrentWeather(this.listing_lat, this.listing_lng).subscribe((response: any) &#x3D;&gt; {
+            let weatherResponse &#x3D; response[&#x27;weather&#x27;][0][&#x27;description&#x27;];
+            this.temperature &#x3D; Math.round(response[&#x27;main&#x27;][&#x27;temp&#x27;]);
+            this.weather &#x3D; weatherResponse[0].toUpperCase() + weatherResponse.slice(1);
+            this.weatherIcon &#x3D; response[&#x27;weather&#x27;][0][&#x27;icon&#x27;];
+            this.weatherIconURL &#x3D; &quot;https://openweathermap.org/img/wn/&quot; + this.weatherIcon + &quot;@4x.png&quot;;
+            this.temperatureColour &#x3D; this.dataService.getTemperatureColour(this.temperature);
+        });
+    }
+
+    /**
+     * Toggles the edit mode for the listing.
+     * Resets the form with current values when canceling edit.
+     */
+    toggleEdit() {
+        this.isEditing &#x3D; !this.isEditing;
+        if (!this.isEditing) {
+            // Reset form with current values when canceling edit
+            this.loadListingData();
+        }
+    }
+
+    /**
+     * Updates the listing with the values from the edit form.
+     * @returns void
+     */
+    onUpdate() {
+        if (this.editForm.valid) {
+            const listingId &#x3D; this.route.snapshot.paramMap.get(&#x27;id&#x27;);
+            if (listingId) {  
+                this.webService.updateListing(
+                    listingId,
+                    this.editForm.value
+                ).subscribe({
+                    next: () &#x3D;&gt; {  
+                        this.isEditing &#x3D; false;
+                        this.loadListingData();
+                    },
+                    error: (error) &#x3D;&gt; {
+                        console.error(&#x27;Error updating listing:&#x27;, error);
+                    }
+                });
+            }
+        }
+    }
+    
+    /**
+     * Deletes the current listing after user confirmation.
+     * @returns void
+     */
+    onDelete() {
+        if (confirm(&#x27;Are you sure you want to delete this listing? This action cannot be undone.&#x27;)) {
+            const listingId &#x3D; this.route.snapshot.paramMap.get(&#x27;id&#x27;);
+            if (listingId) {  // Add null check
+                this.webService.deleteListing(listingId).subscribe({
+                    next: () &#x3D;&gt; {
+                        this.router.navigate([&#x27;/listings&#x27;]);
+                    },
+                    error: (error) &#x3D;&gt; {
+                        console.error(&#x27;Error deleting listing:&#x27;, error);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Submits a new review for the listing.
+     * @returns void
+     */
+    onSubmit() {
+        if (this.reviewForm.valid) {
+            this.webService.postReview(
+                this.route.snapshot.paramMap.get(&#x27;id&#x27;),
+                this.reviewForm.value
+            ).subscribe({
+                next: (response) &#x3D;&gt; {
+                    this.reviewForm.reset();
+                    this.reviewForm.patchValue({ date: this.getCurrentDate() });
+                    this.refreshReviews();
+                    this.refreshListing();
+                },
+                error: (error) &#x3D;&gt; {
+                    console.error(&#x27;Error posting review:&#x27;, error);
+                }
+            });
+        }
+    }
+
+    /**
+     * Gets the current date in YYYY-MM-DD format.
+     * @returns The current date as a string.
+     */
+    getCurrentDate(): string {
+        return new Date().toISOString().split(&#x27;T&#x27;)[0];
+    }
+    
+    /**
+     * Refreshes the reviews for the listing.
+     * @returns void
+     */
+    private refreshReviews() {
+        this.webService.getReviews(
+            this.route.snapshot.paramMap.get(&#x27;id&#x27;)
+        ).subscribe(response &#x3D;&gt; {
+            this.review_list &#x3D; response;
+        });
+    }
+    
+    /**
+     * Refreshes the listing data.
+     * @returns void
+     */
+    private refreshListing() {
+        this.webService.getListing(
+            this.route.snapshot.paramMap.get(&#x27;id&#x27;)
+        ).subscribe((response: any) &#x3D;&gt; {
+            this.listing_list &#x3D; [response];
+        });
+    }
+
+    /**
+     * Checks if a form control is invalid and has been touched.
+     * @param control The name of the form control.
+     * @returns True if the control is invalid and touched, false otherwise.
+     */
+    isInvalid(control: string) {
+        return this.reviewForm.controls[control].invalid &amp;&amp;
+            this.reviewForm.controls[control].touched;
+    }
+
+    /**
+     * Checks if the review form controls are untouched.
+     * @returns True if the form controls are pristine, false otherwise.
+     */
+    isUntouched() {
+        return this.reviewForm.controls.user_name.pristine || 
+               this.reviewForm.controls.comments.pristine;
+    }
+
+    /**
+     * Checks if the review form is incomplete.
+     * @returns True if the form is invalid or untouched, false otherwise.
+     */
+    isIncomplete() {
+        return this.isInvalid(&#x27;user_name&#x27;) || 
+               this.isInvalid(&#x27;comments&#x27;) || 
+               this.isUntouched();
+    }
+}</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;container&quot; style&#x3D;&quot;margin-top: 70px&quot;&gt;
+    @for (listing of listing_list; track listing.name) {
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+        &lt;div class&#x3D;&quot;col-sm-12&quot;&gt;
+            &lt;!-- Edit and Delete buttons --&gt;
+            &lt;ng-container *ngIf&#x3D;&quot;authService.isAuthenticated$ | async&quot;&gt;
+                &lt;div class&#x3D;&quot;float-end&quot;&gt;
+                    &lt;button class&#x3D;&quot;btn btn-primary me-2&quot; (click)&#x3D;&quot;toggleEdit()&quot;&gt;
+                        {{ isEditing ? &#x27;Cancel Edit&#x27; : &#x27;Edit Listing&#x27; }}
+                    &lt;/button&gt;
+                    &lt;button class&#x3D;&quot;btn btn-danger&quot; (click)&#x3D;&quot;onDelete()&quot;&gt;
+                        Delete Listing
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/ng-container&gt;
+
+            &lt;!-- Edit Form --&gt;
+            &lt;div *ngIf&#x3D;&quot;isEditing&quot; class&#x3D;&quot;mt-3 mb-3&quot;&gt;
+                &lt;form [formGroup]&#x3D;&quot;editForm&quot; (ngSubmit)&#x3D;&quot;onUpdate()&quot;&gt;
+                    &lt;div class&#x3D;&quot;form-group&quot;&gt;
+                        &lt;label for&#x3D;&quot;name&quot;&gt;Listing Name&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;text&quot; 
+                               id&#x3D;&quot;name&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;name&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;description&quot;&gt;Description&lt;/label&gt;
+                        &lt;textarea id&#x3D;&quot;description&quot; 
+                                 class&#x3D;&quot;form-control&quot; 
+                                 formControlName&#x3D;&quot;description&quot;&gt;&lt;/textarea&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;property_type&quot;&gt;Property Type&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;text&quot; 
+                               id&#x3D;&quot;property_type&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;property_type&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;room_type&quot;&gt;Room Type&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;text&quot; 
+                               id&#x3D;&quot;room_type&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;room_type&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;accomodates&quot;&gt;Accommodates&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;accomodates&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;accomodates&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;bathrooms&quot;&gt;Bathrooms&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;bathrooms&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;bathrooms&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;bedrooms&quot;&gt;Bedrooms&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;bedrooms&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;bedrooms&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;beds&quot;&gt;Beds&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;beds&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;beds&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;amenities&quot;&gt;Amenities (comma-separated)&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;text&quot; 
+                               id&#x3D;&quot;amenities&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;amenities&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;price&quot;&gt;Price&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;price&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;price&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;minimum_nights&quot;&gt;Minimum Nights&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;minimum_nights&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;minimum_nights&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;maximum_nights&quot;&gt;Maximum Nights&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;maximum_nights&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;maximum_nights&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;review_scores_rating&quot;&gt;Rating (0-5)&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;review_scores_rating&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;review_scores_rating&quot;
+                               min&#x3D;&quot;0&quot; 
+                               max&#x3D;&quot;5&quot; 
+                               step&#x3D;&quot;0.1&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;review_scores_location&quot;&gt;Location Score&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;number&quot; 
+                               id&#x3D;&quot;review_scores_location&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;review_scores_location&quot;
+                               min&#x3D;&quot;0&quot; 
+                               max&#x3D;&quot;5&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;div class&#x3D;&quot;form-group mt-2&quot;&gt;
+                        &lt;label for&#x3D;&quot;neighbourhood&quot;&gt;Neighbourhood&lt;/label&gt;
+                        &lt;input type&#x3D;&quot;text&quot; 
+                               id&#x3D;&quot;neighbourhood&quot; 
+                               class&#x3D;&quot;form-control&quot; 
+                               formControlName&#x3D;&quot;neighbourhood&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;button class&#x3D;&quot;btn btn-success mt-3&quot; type&#x3D;&quot;submit&quot;&gt;
+                        Update Listing
+                    &lt;/button&gt;
+                &lt;/form&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Display view --&gt;
+            &lt;div [hidden]&#x3D;&quot;isEditing&quot;&gt;
+                &lt;div class&#x3D;&quot;display-3 text-wrap&quot;&gt;
+                    {{ listing.name }}
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;mt-2&quot;&gt;
+                    @for(star of [1,2,3,4,5]; track star) {
+                    &lt;img [src]&#x3D;&quot;star &lt;&#x3D; Math.round(listing.review_scores_rating) ? &#x27;images/star.png&#x27; : &#x27;images/empty_star.png&#x27;&quot;
+                        style&#x3D;&quot;width: 30px; height: 30px;&quot;&gt;
+                    }
+                    &lt;span&gt;({{ listing.review_scores_rating }})&lt;/span&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class&#x3D;&quot;row&quot;&gt;
+        &lt;div class&#x3D;&quot;col-sm-6&quot;&gt;
+            &lt;div class&#x3D;&quot;text-wrap&quot;&gt;
+                &lt;br&gt;
+                {{ listing.description }}
+            &lt;/div&gt;
+            &lt;div class&#x3D;&quot;weather-container text-center mt-3&quot;&gt;
+                &lt;svg height&#x3D;&quot;100&quot; width&#x3D;&quot;100&quot;&gt;
+                    &lt;g&gt;
+                        &lt;circle [style.fill]&#x3D;&quot;temperatureColour&quot; cx&#x3D;&quot;50&quot; cy&#x3D;&quot;50&quot; r&#x3D;&quot;40&quot;&gt;
+                        &lt;/circle&gt;
+                        &lt;text x&#x3D;&quot;50%&quot; y&#x3D;&quot;50%&quot; font-size&#x3D;&quot;1.3em&quot; text-anchor&#x3D;&quot;middle&quot; stroke&#x3D;&quot;#000&quot; stroke-width&#x3D;&quot;1px&quot;
+                            dy&#x3D;&quot;.3em&quot;&gt;
+                            {{ temperature }}
+                            &lt;tspan dy&#x3D;&quot;-10&quot;&gt;o&lt;/tspan&gt;
+                            &lt;tspan dy&#x3D;&quot;10&quot;&gt; C&lt;/tspan&gt;
+                        &lt;/text&gt;
+                    &lt;/g&gt;
+                &lt;/svg&gt;
+                &lt;img src&#x3D;&quot;{{ weatherIconURL }}&quot;&gt;&lt;br&gt;
+                &lt;p&gt;Current weather: {{ weather }}&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class&#x3D;&quot;col-sm-6&quot;&gt;
+            &lt;div class&#x3D;&quot;text-center&quot;&gt;
+                &lt;google-map height&#x3D;&quot;400px&quot; width&#x3D;&quot;400px&quot; [options]&#x3D;&quot;map_options&quot;&gt;
+                    @for (location of map_locations; track location) {
+                    &lt;map-advanced-marker #markerElem&#x3D;&quot;mapAdvancedMarker&quot;
+                        [position]&#x3D;&quot;{lat: location.lat, lng: location.lng}&quot;&gt;
+                    &lt;/map-advanced-marker&gt;
+                    }
+                &lt;/google-map&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;row&quot; style&#x3D;&quot;margin-top: 70px&quot;&gt;
+        &lt;div class&#x3D;&quot;col-sm-12&quot;&gt;
+            @for ( review of review_list; track review.user_name + review.date ) {
+            &lt;div class&#x3D;&quot;card bg-light mb-3&quot;&gt;
+                &lt;div class&#x3D;&quot;card-header&quot;&gt;
+                    {{ review.user_name }}
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;card-body&quot;&gt;
+                    &lt;!-- Add these classes to handle text wrapping --&gt;
+                    &lt;div class&#x3D;&quot;text-wrap text-break&quot;&gt;
+                        {{ review.comments }}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;card-footer&quot;&gt;
+                    Date: {{ review.date }}
+                &lt;/div&gt;
+            &lt;/div&gt;
+            }
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class&#x3D;&quot;container&quot; style&#x3D;&quot;margin-top: 50px;&quot;&gt;
+        &lt;div class&#x3D;&quot;row&quot;&gt;
+            &lt;div class&#x3D;&quot;col-sm-12&quot;&gt;
+                &lt;ng-container *ngIf&#x3D;&quot;authService.isAuthenticated$ | async; else loggedOut&quot;&gt;
+                    &lt;div class&#x3D;&quot;review-form-container bg-light p-4 rounded shadow-sm border border-primary&quot;&gt;
+                        &lt;h2 class&#x3D;&quot;text-primary mb-4&quot;&gt;Share Your Experience&lt;/h2&gt;
+                        &lt;form [formGroup]&#x3D;&quot;reviewForm&quot; (ngSubmit)&#x3D;&quot;onSubmit()&quot;&gt;
+                            &lt;div class&#x3D;&quot;form-group mb-3&quot;&gt;
+                                &lt;label for&#x3D;&quot;user_name&quot; class&#x3D;&quot;form-label text-primary fw-semibold&quot;&gt;Username&lt;/label&gt;
+                                &lt;input type&#x3D;&quot;text&quot; 
+                                       name&#x3D;&quot;username&quot; 
+                                       id&#x3D;&quot;username&quot; 
+                                       class&#x3D;&quot;form-control&quot; 
+                                       formControlName&#x3D;&quot;user_name&quot;
+                                       [ngClass]&#x3D;&quot;{ &#x27;border-danger&#x27;: isInvalid(&#x27;user_name&#x27;), &#x27;border-primary&#x27;: !isInvalid(&#x27;user_name&#x27;) }&quot;&gt;
+                                &lt;div *ngIf&#x3D;&quot;isInvalid(&#x27;user_name&#x27;)&quot; class&#x3D;&quot;invalid-feedback d-block&quot;&gt;
+                                    Username is required
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                            &lt;div class&#x3D;&quot;form-group mb-3&quot;&gt;
+                                &lt;label for&#x3D;&quot;comments&quot; class&#x3D;&quot;form-label text-primary fw-semibold&quot;&gt;Share your thoughts&lt;/label&gt;
+                                &lt;textarea name&#x3D;&quot;comment&quot; 
+                                          id&#x3D;&quot;comment&quot; 
+                                          class&#x3D;&quot;form-control&quot; 
+                                          formControlName&#x3D;&quot;comments&quot;
+                                          [ngClass]&#x3D;&quot;{ &#x27;border-danger&#x27;: isInvalid(&#x27;comments&#x27;), &#x27;border-primary&#x27;: !isInvalid(&#x27;comments&#x27;) }&quot;
+                                          rows&#x3D;&quot;4&quot;&gt;&lt;/textarea&gt;
+                                &lt;div *ngIf&#x3D;&quot;isInvalid(&#x27;comments&#x27;)&quot; class&#x3D;&quot;invalid-feedback d-block&quot;&gt;
+                                    Comments are required
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                            &lt;div class&#x3D;&quot;form-group mb-3&quot;&gt;
+                                &lt;label for&#x3D;&quot;date&quot; class&#x3D;&quot;form-label text-primary fw-semibold&quot;&gt;Date&lt;/label&gt;
+                                &lt;input type&#x3D;&quot;date&quot; 
+                                       name&#x3D;&quot;date&quot; 
+                                       id&#x3D;&quot;date&quot; 
+                                       class&#x3D;&quot;form-control border-primary&quot; 
+                                       formControlName&#x3D;&quot;date&quot;
+                                       [value]&#x3D;&quot;getCurrentDate()&quot; 
+                                       readonly&gt;
+                            &lt;/div&gt;
+                            &lt;div class&#x3D;&quot;mt-3&quot;&gt;
+                                &lt;span *ngIf&#x3D;&quot;isIncomplete()&quot; class&#x3D;&quot;text-danger d-block mb-2&quot;&gt;
+                                    &lt;i class&#x3D;&quot;bi bi-exclamation-circle-fill me-1&quot;&gt;&lt;/i&gt;
+                                    Please fill in all required fields
+                                &lt;/span&gt;
+                                &lt;button *ngIf&#x3D;&quot;!isIncomplete()&quot; 
+                                        class&#x3D;&quot;btn btn-primary px-4 py-2 fw-semibold&quot; 
+                                        type&#x3D;&quot;submit&quot;&gt;
+                                    Submit Review
+                                &lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/form&gt;
+                    &lt;/div&gt;
+                &lt;/ng-container&gt;
+                &lt;ng-template #loggedOut&gt;
+                    &lt;div class&#x3D;&quot;alert alert-primary text-center p-4&quot;&gt;
+                        &lt;h2 class&#x3D;&quot;text-primary mb-0&quot;&gt;Please log in to review this listing&lt;/h2&gt;
+                    &lt;/div&gt;
+                &lt;/ng-template&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    }
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./listing.component.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">.error { background-color: #faafaf }</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div class="container" style="margin-top: 70px">    @for (listing of listing_list; track listing.name) {    <div class="row">        <div class="col-sm-12">            <!-- Edit and Delete buttons -->            <ng-container *ngIf="authService.isAuthenticated$ | async">                <div class="float-end">                    <button class="btn btn-primary me-2" (click)="toggleEdit()">                        {{ isEditing ? \'Cancel Edit\' : \'Edit Listing\' }}                    </button>                    <button class="btn btn-danger" (click)="onDelete()">                        Delete Listing                    </button>                </div>            </ng-container>            <!-- Edit Form -->            <div *ngIf="isEditing" class="mt-3 mb-3">                <form [formGroup]="editForm" (ngSubmit)="onUpdate()">                    <div class="form-group">                        <label for="name">Listing Name</label>                        <input type="text"                                id="name"                                class="form-control"                                formControlName="name">                    </div>                    <div class="form-group mt-2">                        <label for="description">Description</label>                        <textarea id="description"                                  class="form-control"                                  formControlName="description"></textarea>                    </div>                    <div class="form-group mt-2">                        <label for="property_type">Property Type</label>                        <input type="text"                                id="property_type"                                class="form-control"                                formControlName="property_type">                    </div>                    <div class="form-group mt-2">                        <label for="room_type">Room Type</label>                        <input type="text"                                id="room_type"                                class="form-control"                                formControlName="room_type">                    </div>                    <div class="form-group mt-2">                        <label for="accomodates">Accommodates</label>                        <input type="number"                                id="accomodates"                                class="form-control"                                formControlName="accomodates">                    </div>                    <div class="form-group mt-2">                        <label for="bathrooms">Bathrooms</label>                        <input type="number"                                id="bathrooms"                                class="form-control"                                formControlName="bathrooms">                    </div>                    <div class="form-group mt-2">                        <label for="bedrooms">Bedrooms</label>                        <input type="number"                                id="bedrooms"                                class="form-control"                                formControlName="bedrooms">                    </div>                    <div class="form-group mt-2">                        <label for="beds">Beds</label>                        <input type="number"                                id="beds"                                class="form-control"                                formControlName="beds">                    </div>                    <div class="form-group mt-2">                        <label for="amenities">Amenities (comma-separated)</label>                        <input type="text"                                id="amenities"                                class="form-control"                                formControlName="amenities">                    </div>                    <div class="form-group mt-2">                        <label for="price">Price</label>                        <input type="number"                                id="price"                                class="form-control"                                formControlName="price">                    </div>                    <div class="form-group mt-2">                        <label for="minimum_nights">Minimum Nights</label>                        <input type="number"                                id="minimum_nights"                                class="form-control"                                formControlName="minimum_nights">                    </div>                    <div class="form-group mt-2">                        <label for="maximum_nights">Maximum Nights</label>                        <input type="number"                                id="maximum_nights"                                class="form-control"                                formControlName="maximum_nights">                    </div>                    <div class="form-group mt-2">                        <label for="review_scores_rating">Rating (0-5)</label>                        <input type="number"                                id="review_scores_rating"                                class="form-control"                                formControlName="review_scores_rating"                               min="0"                                max="5"                                step="0.1">                    </div>                    <div class="form-group mt-2">                        <label for="review_scores_location">Location Score</label>                        <input type="number"                                id="review_scores_location"                                class="form-control"                                formControlName="review_scores_location"                               min="0"                                max="5">                    </div>                    <div class="form-group mt-2">                        <label for="neighbourhood">Neighbourhood</label>                        <input type="text"                                id="neighbourhood"                                class="form-control"                                formControlName="neighbourhood">                    </div>                    <button class="btn btn-success mt-3" type="submit">                        Update Listing                    </button>                </form>            </div>            <!-- Display view -->            <div [hidden]="isEditing">                <div class="display-3 text-wrap">                    {{ listing.name }}                </div>                <div class="mt-2">                    @for(star of [1,2,3,4,5]; track star) {                    <img [src]="star <= Math.round(listing.review_scores_rating) ? \'images/star.png\' : \'images/empty_star.png\'"                        style="width: 30px; height: 30px;">                    }                    <span>({{ listing.review_scores_rating }})</span>                </div>            </div>        </div>    </div>        <div class="row">        <div class="col-sm-6">            <div class="text-wrap">                <br>                {{ listing.description }}            </div>            <div class="weather-container text-center mt-3">                <svg height="100" width="100">                    <g>                        <circle [style.fill]="temperatureColour" cx="50" cy="50" r="40">                        </circle>                        <text x="50%" y="50%" font-size="1.3em" text-anchor="middle" stroke="#000" stroke-width="1px"                            dy=".3em">                            {{ temperature }}                            <tspan dy="-10">o</tspan>                            <tspan dy="10"> C</tspan>                        </text>                    </g>                </svg>                <img src="{{ weatherIconURL }}"><br>                <p>Current weather: {{ weather }}</p>            </div>        </div>        <div class="col-sm-6">            <div class="text-center">                <google-map height="400px" width="400px" [options]="map_options">                    @for (location of map_locations; track location) {                    <map-advanced-marker #markerElem="mapAdvancedMarker"                        [position]="{lat: location.lat, lng: location.lng}">                    </map-advanced-marker>                    }                </google-map>            </div>        </div>    </div>    <div class="row" style="margin-top: 70px">        <div class="col-sm-12">            @for ( review of review_list; track review.user_name + review.date ) {            <div class="card bg-light mb-3">                <div class="card-header">                    {{ review.user_name }}                </div>                <div class="card-body">                    <!-- Add these classes to handle text wrapping -->                    <div class="text-wrap text-break">                        {{ review.comments }}                    </div>                </div>                <div class="card-footer">                    Date: {{ review.date }}                </div>            </div>            }        </div>    </div>    <div class="container" style="margin-top: 50px;">        <div class="row">            <div class="col-sm-12">                <ng-container *ngIf="authService.isAuthenticated$ | async; else loggedOut">                    <div class="review-form-container bg-light p-4 rounded shadow-sm border border-primary">                        <h2 class="text-primary mb-4">Share Your Experience</h2>                        <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">                            <div class="form-group mb-3">                                <label for="user_name" class="form-label text-primary fw-semibold">Username</label>                                <input type="text"                                        name="username"                                        id="username"                                        class="form-control"                                        formControlName="user_name"                                       [ngClass]="{ \'border-danger\': isInvalid(\'user_name\'), \'border-primary\': !isInvalid(\'user_name\') }">                                <div *ngIf="isInvalid(\'user_name\')" class="invalid-feedback d-block">                                    Username is required                                </div>                            </div>                            <div class="form-group mb-3">                                <label for="comments" class="form-label text-primary fw-semibold">Share your thoughts</label>                                <textarea name="comment"                                           id="comment"                                           class="form-control"                                           formControlName="comments"                                          [ngClass]="{ \'border-danger\': isInvalid(\'comments\'), \'border-primary\': !isInvalid(\'comments\') }"                                          rows="4"></textarea>                                <div *ngIf="isInvalid(\'comments\')" class="invalid-feedback d-block">                                    Comments are required                                </div>                            </div>                            <div class="form-group mb-3">                                <label for="date" class="form-label text-primary fw-semibold">Date</label>                                <input type="date"                                        name="date"                                        id="date"                                        class="form-control border-primary"                                        formControlName="date"                                       [value]="getCurrentDate()"                                        readonly>                            </div>                            <div class="mt-3">                                <span *ngIf="isIncomplete()" class="text-danger d-block mb-2">                                    <i class="bi bi-exclamation-circle-fill me-1"></i>                                    Please fill in all required fields                                </span>                                <button *ngIf="!isIncomplete()"                                         class="btn btn-primary px-4 py-2 fw-semibold"                                         type="submit">                                    Submit Review                                </button>                            </div>                        </form>                    </div>                </ng-container>                <ng-template #loggedOut>                    <div class="alert alert-primary text-center p-4">                        <h2 class="text-primary mb-0">Please log in to review this listing</h2>                    </div>                </ng-template>            </div>        </div>    </div>    }</div></div>'
+    var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AuthButtonComponent', 'selector': 'auth-button'},{'name': 'AuthUserComponent', 'selector': 'user-profile'},{'name': 'GridComponent', 'selector': 'grid'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'ListingComponent', 'selector': 'listing'},{'name': 'ListingsComponent', 'selector': 'listings'},{'name': 'NavComponent', 'selector': 'navigation'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'ListingComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'ListingComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

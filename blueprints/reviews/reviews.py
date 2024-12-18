@@ -12,100 +12,68 @@ users = globals.users
 operations = globals.operations
 log_operation = globals.log_operation
 
-@reviews_bp.route("/api/v1.0/listings/<string:id>/reviews", methods=["GET"])
-def show_all_reviews(id):
-    data_to_return = []
+def convert_object_ids(obj):
+    if isinstance(obj, ObjectId):
+        return str(obj)
+    elif isinstance(obj, dict):
+        return {key: convert_object_ids(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_object_ids(item) for item in obj]
+    return obj
 
-    page_num, page_size = 1, 3
-    if request.args.get('pn'):
-        page_num = int(request.args.get('pn'))
-    if request.args.get('ps'):
-        page_size = int(request.args.get('ps'))
-    page_start = (page_size * (page_num - 1))
-
-    if page_num < 1 or page_size < 1:
-            return make_response(
-                jsonify({"error": "Invalid pagination parameters"}), 400)
-
-    listing = listings.find_one({"_id" : ObjectId(id)}, {"reviews" : 1, "_id" : 0 })
-    if not listing:
-        return make_response(jsonify({"error": "Listing not found"}), 404)
-    
-    reviews = listing.get("reviews", [])[page_start:page_start + page_size]
-
-    for review in reviews:
-        review['_id'] = str(review['_id']),
-        review['user_id'] = str(review['user_id'])
-        data_to_return.append(review)
-
-    return make_response(jsonify(data_to_return), 200)
+@reviews_bp.route('/api/v1.0/listings/<string:l_id>/reviews', methods=['GET'])
+def show_all_reviews(l_id):
+    try:
+        # Find the listing
+        listing = listings.find_one({"_id": ObjectId(l_id)})
+        if not listing:
+            return make_response(jsonify({"error": "Listing not found"}), 404)
+        
+        # Get reviews from the listing and convert all ObjectIds
+        reviews = listing.get('reviews', [])
+        processed_reviews = convert_object_ids(reviews)
+        
+        return make_response(jsonify(processed_reviews), 200)
+        
+    except Exception as e:
+        print(f"Error fetching reviews: {str(e)}")
+        return make_response(jsonify({"error": str(e)}), 500)
 
 @reviews_bp.route('/api/v1.0/listings/<string:l_id>/reviews', methods=['POST'])
-@role_required('user')
-@jwt_required
 def create_review(l_id):
-    required_fields = [
-        "comments"
-    ]
-
-    # Decode the token to get the host_id and role
-    token = request.headers.get('x-access-token')
-    decoded = jwt.decode(token, globals.secret_key, algorithms=["HS256"])
-    role = decoded['role']
-    user_id = decoded['user_id']
-
-    # Get users info
-    user_info = users.find_one({"_id" : ObjectId(user_id)})
-    if not user_info:
-        return make_response(jsonify({"error": "User not found"}), 404)
-    user_name = user_info.get("user_name")
-    
-    # Check if missing required fields
-    missing_fields = [field for field in required_fields if field not in request.form]
-    if missing_fields:
-        return make_response(jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400)
-    
-    # Check if comments field empty
-    comments = request.form.get("comments", "").strip()
-    if not comments:
-        return make_response(jsonify({"error": "Comments field cannot be empty"}), 400)
-    
     try:
-        review_id = ObjectId()  # Create the review ID first
+        # First verify the listing exists
+        listing = listings.find_one({"_id": ObjectId(l_id)})
+        if not listing:
+            return make_response(jsonify({"error": "Listing not found"}), 404)
+
+        # Create new review without _id field since it's embedded
         new_review = {
-            "_id": review_id,
-            "user_id": ObjectId(user_id),
-            "user_name": user_name,
+            "user_name": request.form["user_name"],
             "comments": request.form["comments"],
-            "date": datetime.today().strftime('%Y-%m-%d')
+            "date": request.form.get("date", datetime.today().strftime('%Y-%m-%d')),
+            "_id": ObjectId()  # Add a unique ID for each review
         }
 
-        # Updating the target listing to add the new_review 
-        result = listings.update_one({ "_id" : ObjectId(l_id)}, { "$push" : {"reviews" : new_review }})
+        # Update the listing with the new review
+        result = listings.update_one(
+            {"_id": ObjectId(l_id)}, 
+            {"$push": {"reviews": new_review}}
+        )
 
         if result.matched_count == 0:
             return make_response(jsonify({"error": "Listing not found"}), 404)
         
-        # Add _id of the review to the users collection user_reviews array
-        user_result = users.update_one({"_id": ObjectId(user_id)}, {"$push": {"user_reviews": review_id}})
+        if result.modified_count == 0:
+            return make_response(jsonify({"error": "Review was not added"}), 500)
 
+        # Convert ObjectIds before returning
+        processed_review = convert_object_ids(new_review)
+        return make_response(jsonify(processed_review), 201)
 
-        if user_result.modified_count == 0:
-            # If user update failed, you might want to roll back the listing update
-            listings.update_one(
-                {"_id": ObjectId(l_id)},
-                {"$pull": {"reviews": {"_id": review_id}}}
-            )
-            return make_response(jsonify({"error": "Failed to update user reviews"}), 500)
-        
-        # After adding a new review
-        log_operation("create_review", review_id, user_id, role)
-        
-        new_review_link = f"http://127.0.0.1:5000/api/v1.0/listings/{l_id}/reviews/{new_review['_id']}"
-        return make_response(jsonify({"url" : new_review_link}), 201)
-
-    except (ValueError, TypeError):
-        return make_response(jsonify({"error": "Invalid form data"}), 400)
+    except Exception as e:
+        print(f"Error creating review: {str(e)}")
+        return make_response(jsonify({"error": str(e)}), 500)
     
 @reviews_bp.route("/api/v1.0/listings/<string:l_id>/reviews/<string:r_id>", methods=["PUT"])
 @role_required('user')
