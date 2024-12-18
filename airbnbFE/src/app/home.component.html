@@ -1,0 +1,49 @@
+<div class="container" style="margin-top: 70px; padding: 20px;">
+    <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 20px; margin-top: 20px;">Listing Price Distribution</h1>
+    
+    <div class="grid" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+      <div *ngFor="let range of priceRanges" 
+           style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <h3 style="font-size: 18px; font-weight: bold;">{{ range.range }}</h3>
+          <span style="color: gray;">{{ range.count }} listings</span>
+        </div>
+        
+        <!-- Progress bar -->
+        <div style="width: 100%; background-color: #f0f0f0; border-radius: 5px; height: 10px; margin-bottom: 10px;">
+          <div style="background-color: #007bff; height: 10px; border-radius: 5px;" 
+               [style.width]="range.percentage + '%'">
+          </div>
+        </div>
+        
+        <div style="font-size: 14px; color: gray;">
+          {{ range.percentage }}% of total listings
+        </div>
+        
+        <!-- Expandable listings section -->
+        <div style="margin-top: 20px;">
+          <button (click)="range.showListings = !range.showListings" 
+                  style="background: none; border: none; color: #007bff; cursor: pointer;">
+            {{ range.showListings ? 'Hide' : 'Show' }} Listings
+          </button>
+          
+          <div *ngIf="range.showListings" style="margin-top: 10px;">
+            <div *ngFor="let listing of range.listings" 
+                 style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+              <div style="font-weight: bold;">{{ listing.name }}</div>
+              <div style="color: gray;">${{ listing.price }} per night</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="loading" style="text-align: center; padding: 40px;">
+      Loading price range data...
+    </div>
+    
+    <div *ngIf="error" style="text-align: center; padding: 40px; color: red;">
+      Error loading price range data. Please try again later.
+    </div>
+  </div>
+  
