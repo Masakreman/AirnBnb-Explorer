@@ -21,7 +21,7 @@ export class DataService {
      * @returns Observable with the Lorem Ipsum text
      */
     getLoremIpsum(paragraphs: number): Observable<any> {
-        let API_key = 'se8iMQVK7YvPwVR2v7pAgQ==XuyjlTXln7YxU6eT';
+        let API_key = 'APININJASKEY';
         return this.http.get<any>(
             'https://api.api-ninjas.com/v1/loremipsum?paragraphs=' + paragraphs,
             { headers: { 'X-Api-Key': API_key } }
@@ -35,7 +35,7 @@ export class DataService {
      * @returns Observable with weather details from OpenWeatherMap
      */
     getCurrentWeather(lat: number, lon: number) {
-        let API_key = "5358fa926cd6340d99ca4b81f9a6ecc9";
+        let API_key = "OPENWEATHERAPI";
         return this.http.get<any>(
             'https://api.openweathermap.org/data/2.5/weather?lat=' + lat +
             '&lon=' + lon + '&units=metric&appid=' + API_key

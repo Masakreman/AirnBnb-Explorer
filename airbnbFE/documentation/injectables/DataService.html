@@ -526,7 +526,7 @@ export class DataService {
      * @returns Observable with weather details from OpenWeatherMap
      */
     getCurrentWeather(lat: number, lon: number) {
-        let API_key &#x3D; &quot;5358fa926cd6340d99ca4b81f9a6ecc9&quot;;
+        let API_key &#x3D; &quot;OPENWEATHERAPIKEY&quot;;
         return this.http.get&lt;any&gt;(
             &#x27;https://api.openweathermap.org/data/2.5/weather?lat&#x3D;&#x27; + lat +
             &#x27;&amp;lon&#x3D;&#x27; + lon + &#x27;&amp;units&#x3D;metric&amp;appid&#x3D;&#x27; + API_key
